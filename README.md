@@ -18,73 +18,59 @@ Google Sheets Integration: Real-time database storage.
 
 Windows 10/11
 
-Python 3.8 or higher (You are using 3.13.5)
+Python 3.8 or higher
 
 A Google Cloud Service Account JSON key
 
 🚀 Installation & Setup
 
-1. Project Setup
+Project Setup
 
-Open your terminal (Command Prompt or PowerShell) and navigate to your project folder:
+Open your terminal and navigate to your project folder:
 
 cd D:\chakma_survey_app
 
 
-2. Install Libraries
-
-Run the following command to install the required Python packages:
+Install Libraries
 
 pip install streamlit pandas gspread google-auth
 
 
-3. Google Sheet Setup (CRITICAL STEP)
+Google Sheet Setup (CRITICAL STEP)
 
-Most errors happen here. Follow these steps exactly:
+Create a new Google Sheet.
 
-Create a new Google Sheet at sheets.new.
-
-Name it: Chakma_Final_Database (or similar).
-
-Copy and Paste these exact headers into Row 1 (Cells A1 to J1):
+Copy and paste these headers into Row 1 (A1 to J1):
 
 Original text | User1_Name | User1_Option_1 | User1_Option_2 | User2_Name | User2_Option_1 | User2_Option_2 | User3_Name | User3_Option_1 | User3_Option_2
 
 
-(Ensure each is in its own column, A through J).
+Paste your comments into Column A starting from Row 2.
 
-Paste your 10,000 comments into Column A (Original text) starting from Row 2.
+Share the sheet with your Service Account email and give Editor permission.
 
-Click Share (top right) > Paste your Service Account Email:
-chakma-annotations-sa@socialapp-e3e52.iam.gserviceaccount.com
+Copy the Sheet ID from the URL and paste it into app.py at line 8:
 
-Set permission to Editor > Click Send.
+SHEET_ID = "YOUR_SHEET_ID_HERE"
 
-Copy the Sheet ID from the URL (the string between /d/ and /edit) and paste it into app.py at line 8: SHEET_ID = "...".
 
-4. Secrets Configuration
+Secrets Configuration
 
-Streamlit needs your API keys to talk to Google.
+Create a folder named .streamlit in your project folder.
 
-Create a folder named .streamlit inside your project folder.
-
-Inside that folder, create a file named secrets.toml.
-
-Paste your Google Service Account credentials into secrets.toml in this format:
+Inside it, create secrets.toml with your Service Account credentials:
 
 [gcp_service_account]
 type = "service_account"
-project_id = "socialapp-e3e52"
+project_id = "YOUR_PROJECT_ID"
 private_key_id = "..."
 private_key = "-----BEGIN PRIVATE KEY-----\n..."
-client_email = "..."
+client_email = "YOUR_SERVICE_ACCOUNT_EMAIL"
 client_id = "..."
-# ... (add the rest of your JSON file content here)
+# ... rest of JSON content
 
 
 ▶️ Running the App
-
-In your terminal, run:
 
 streamlit run app.py
 
@@ -95,27 +81,19 @@ A browser window will open automatically.
 
 Navigation: Select "Admin Login" from the sidebar.
 
-Password: Jamwa_tribal_adam_1984@ (Change this in app.py if needed).
+Password: Set in app.py as:
 
-Capabilities: View progress metrics, active users, and download the full dataset as CSV.
+ADMIN_PASSWORD = "YOUR_NEW_PASSWORD"
+
+
+Capabilities: View progress metrics, active users, and download the dataset as CSV.
 
 ❓ Troubleshooting
 
-Error
-
-Solution
-
-APIError: [400]... not supported
-
-You are using an .xlsx (Excel) file. Create a new Google Sheet and copy your data there.
-
-KeyError: 'User1_Option_1'
-
-Your Google Sheet is missing headers. Copy the headers listed in Step 3 above into Row 1.
-
-gspread.exceptions.SpreadsheetNotFound
-
-The SHEET_ID in app.py is wrong OR you haven't shared the sheet with the Service Account email.
+Error	Solution
+APIError: [400]...	Use a Google Sheet instead of an Excel file.
+KeyError: 'User1_Option_1'	Ensure headers are correctly in Row 1.
+gspread.exceptions.SpreadsheetNotFound	Check the SHEET_ID and that the sheet is shared with the Service Account.
 
 📦 Deployment (Streamlit Cloud)
 
@@ -123,6 +101,4 @@ Push your code to GitHub.
 
 Connect your repository to Streamlit Community Cloud.
 
-In the Streamlit Cloud dashboard, go to App Settings > Secrets.
-
-Copy the contents of your local secrets.toml and paste them into the Cloud Secrets area.
+In the Streamlit Cloud dashboard, go to App Settings > Secrets and paste the contents of your secrets.toml.
